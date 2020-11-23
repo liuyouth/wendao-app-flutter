@@ -64,6 +64,7 @@ class MainPageState extends State<MainPage>
     super.mixinBuild(context);
   }
   MainVM _vm;
+  QAHomeFragment _qaHomeFragment;
   @override
   Widget vmBuild(BuildContext context, MainVM vm, Widget child, Widget state) {
     _vm = vm;
@@ -158,7 +159,7 @@ class MainPageState extends State<MainPage>
                 );
               }
             getDayView(MainVM vm){
-              return QAHomeFragment();
+    return _qaHomeFragment == null ? _qaHomeFragment=QAHomeFragment() : _qaHomeFragment;
             }
               // getDayView(MainVM vm) {
               //

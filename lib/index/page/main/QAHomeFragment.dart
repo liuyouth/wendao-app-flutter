@@ -21,35 +21,44 @@ class _QAHomeFragmentState extends State<QAHomeFragment> {
  @override
   void initState() {
    super.initState();
-   getQuestionList.call().then((value) => {datas.addAll(value)});
+   getQuestionList();
   }
   Future<List<Question>> getQuestionList() async {
     ListResult<Question> resultI = await NetManager.instance.getQuestionList(0);
+    setState(() {
+      datas.addAll(resultI.getData());
+    });
     return resultI.getData();
   }
   @override
   Widget build(BuildContext context) => new Scaffold(
     appBar: new AppBar(
       backgroundColor: Color(0xffFfffff),
-      title: const Text('Page Demo',style: TextStyles.textDarkGray14,),
+      title: const Text('近日趋势',style: TextStyles.textDarkGray14,),
     ),
     backgroundColor: Color(0xffF2F5F9),
-    body: new LayoutBuilder(builder: (context, constraints) => new NotificationListener(
+    // todo 添加 回复问题按钮 
+    body: new LayoutBuilder(builder: (context, constraints) =>  NotificationListener(
       onNotification: (ScrollNotification note) {
                     setState(() {
           _currentPage = _pageController.page;
-          print('eeee'+_currentPage.toString());
         });
+                    return false;
       },
-      child: new PageView.custom(
+      child:  PageView.custom(
         physics: const PageScrollPhysics(parent: const BouncingScrollPhysics()),
         controller: _pageController,
-        childrenDelegate: new SliverChildBuilderDelegate(
-              (context, index) => new QAFragment(
-            datas[_currentPage.toInt()],
-            parallaxOffset: constraints.maxWidth / 2.0 * (index - _currentPage),
-          ),
-          childCount: 10,
+        childrenDelegate:  SliverChildBuilderDelegate(
+              (context, index) {
+                return (datas.length != 0)?
+                QAFragment(
+                  datas[index],
+                  parallaxOffset: constraints.maxWidth / 2.0 *
+                      (index - _currentPage),) :
+                Center(child: Text("暂时还没有数据！"));
+              }
+          ,
+          childCount: (datas.length == 0)? 1 : datas.length ,
         ),
       ),
     )),
