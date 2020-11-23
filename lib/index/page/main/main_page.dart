@@ -7,6 +7,7 @@ import 'package:flutter/painting.dart';
 import 'package:flutter/rendering.dart';
 import 'package:provider/provider.dart';
 import 'package:task/index/index_router.dart';
+import 'package:task/index/page/main/QAHomeFragment.dart';
 import 'package:task/index/page/main/Question.dart';
 import 'package:task/index/page/main/main_core.dart';
 import 'package:task/packages/fast_mvvm/fast_mvvm.dart';
@@ -86,6 +87,7 @@ class MainPageState extends State<MainPage>
         },
       ),
       body: TabBarView(
+        physics: new NeverScrollableScrollPhysics(),
         controller: _tabController,
         children: <Widget>[
           Container(
@@ -155,40 +157,43 @@ class MainPageState extends State<MainPage>
                   ),
                 );
               }
-            
-              getDayView(MainVM vm) {
-                return Column(
-                  children: [
-                    Container(
-                      margin: EdgeInsets.only(top: 40),
-                      height: 30,
-                      child: Text("闻道"),
-                    ),
-                    Container(
-                      width: 430,
-                      height: 180,
-                      child: ListView.builder(
-                        scrollDirection: Axis.horizontal,
-                        padding: EdgeInsets.all(5),
-                        itemCount: vm.dayWDFeeds.value.length,
-                        itemBuilder: (ctx, index) {
-                          return Selector<MainVM, Question>(
-                            selector: (_, aVM) => aVM.dayWDFeeds.value[index],
-                            shouldRebuild: (pre, next) => pre == next,
-                            builder: (_, Question value, __) =>
-                                _wd_feed_item(context,vm, value),
-                          );
-                        },
-                      ),
-                    ),
-
-                    getView("闻达","看到想办法达到",Color(0xff104377),
-                            ()=>NavigatorUtils.push(vm.context, IndexRouter.indexPage)),
-            
-            
-                  ],
-                );
-              }
+            getDayView(MainVM vm){
+              return QAHomeFragment();
+            }
+              // getDayView(MainVM vm) {
+              //
+              //   return Column(
+              //     children: [
+              //       Container(
+              //         margin: EdgeInsets.only(top: 40),
+              //         height: 30,
+              //         child: Text("闻道"),
+              //       ),
+              //       Container(
+              //         width: 430,
+              //         height: 180,
+              //         child: ListView.builder(
+              //           scrollDirection: Axis.horizontal,
+              //           padding: EdgeInsets.all(5),
+              //           itemCount: vm.dayWDFeeds.value.length,
+              //           itemBuilder: (ctx, index) {
+              //             return Selector<MainVM, Question>(
+              //               selector: (_, aVM) => aVM.dayWDFeeds.value[index],
+              //               shouldRebuild: (pre, next) => pre == next,
+              //               builder: (_, Question value, __) =>
+              //                   _wd_feed_item(context,vm, value),
+              //             );
+              //           },
+              //         ),
+              //       ),
+              //
+              //       getView("闻达","看到想办法达到",Color(0xff104377),
+              //               ()=>NavigatorUtils.push(vm.context, IndexRouter.indexPage)),
+              //
+              //
+              //     ],
+              //   );
+              // }
             
               getBox(String s, String info, String date, String asker, String answerer,Color color, Function() onTap) {
                 return InkWell(
@@ -252,16 +257,16 @@ class MainPageState extends State<MainPage>
               }
 
   _wd_feed_item(BuildContext context, MainVM vm,Question value) {
-    var info = "暂时还未有达者回答，快来发表见解";
-    var answerer = "达者为师";
-    if(value.answers!=null)
-    if(value.answers.length>0){
-      info = value.answers[0].title;
-      answerer = value.answers[0].info;
-    }
+    // var info = "暂时还未有达者回答，快来发表见解";
+    // var answerer = "达者为师";
+    // if(value.answers!=null)
+    // if(value.answers.length>0){
+    //   info = value.answers[0].title;
+    //   answerer = value.answers[0].info;
+    // }
     if(value.postUser==null)
       value.postUser = User.fromName("佚名");
-    return getBox(value.title, info, value.postTime.toString(), value.postUser.nikeName, answerer, Color(0xff5A76E5),
+    return getBox(value.title, value.info, value.postTime.toString(), value.postUser.nikeName, "TAG", Color(0xff5A76E5),
       ()=> NavigatorUtils.push(vm.context, IndexRouter.taskPage));
   }
 }
