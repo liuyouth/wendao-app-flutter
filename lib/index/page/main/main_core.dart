@@ -63,12 +63,12 @@ class MainVM extends BaseViewModel<MainModel, MainEntity> {
   }
 
   void tabOnShow(int index) {
-    if(index==1) {
-      model.getQuestionList().then((value) {
-        dayWDFeeds.value.addAll(value);
-        notifyListeners();
-      });
-    }
+    // if(index==1) {
+    //   model.getQuestionList().then((value) {
+    //     dayWDFeeds.value.addAll(value);
+    //     notifyListeners();
+    //   });
+    // }
 
 
   }

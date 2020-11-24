@@ -1,3 +1,4 @@
+
 import 'dart:math';
 
 import 'package:flustars/flustars.dart';
@@ -5,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:task/index/NetManager/NetManager.dart';
 import 'package:task/index/NetManager/Result.dart';
+import 'package:task/index/page/main/Answer.dart';
 import 'package:task/index/page/main/QAFragment.dart';
 import 'package:task/index/page/main/Question.dart';
 import 'package:task/index/page/main/rotate_box.dart';
@@ -27,15 +29,6 @@ class _QAHomeFragmentState extends State<QAHomeFragment> {
     super.initState();
     getQuestionList();
   }
-
-  Future<List<Question>> getQuestionList() async {
-    ListResult<Question> resultI = await NetManager.instance.getQuestionList(0);
-    setState(() {
-      datas.addAll(resultI.getData());
-    });
-    return resultI.getData();
-  }
-
   bool isShow = false;
 
   _itemclick() {
@@ -43,6 +36,7 @@ class _QAHomeFragmentState extends State<QAHomeFragment> {
       isShow = !isShow;
     });
   }
+  TextEditingController _answerTextController = TextEditingController();
 
   @override
   Widget build(BuildContext context) => new Scaffold(
@@ -94,7 +88,8 @@ class _QAHomeFragmentState extends State<QAHomeFragment> {
                   height: 50,
                   width: isShow ? ScreenUtil.getScreenW(context) * 0.9 : 50,
                   child: TextField(
-                    onSubmitted: (s) => fastAddTask(text: s),
+                    controller: _answerTextController,
+                    onSubmitted: (s) => fastAddTask(s),
                     style: TextStyles.textBold18,
                     decoration: InputDecoration(
                       hintText: ' Answers —— —— - - ',
@@ -132,7 +127,8 @@ class _QAHomeFragmentState extends State<QAHomeFragment> {
                               spreadRadius: -.0)
                         ],
                         borderRadius: BorderRadius.all(Radius.circular(50))),
-                    child: Icon(Icons.send, size: 30),
+                    child: InkWell(child: Icon(Icons.send, size: 30)
+                    ,onTap: ()=>fastAddTask(_answerTextController.text.toString()),),
                   ),
                 ),
                 alignment: Alignment.centerRight,
@@ -164,5 +160,31 @@ class _QAHomeFragmentState extends State<QAHomeFragment> {
         ),
       );
 
-  fastAddTask({String text}) {}
+
+
+  fastAddTask(String text) async {
+    Answer answer = Answer.empty();
+    answer.questionNo = datas[_currentPage.toInt()].number;
+    answer.title = text;
+    Answer a = await askQuestionNet(answer);
+    if(a!=null){
+      setState(() {
+        isShow = !isShow;
+      });
+    }else {
+
+    }
+  }
+  Future<Answer> askQuestionNet(Answer answer) async {
+    ResultI<Answer> resultI = await NetManager.instance.askQuestion(answer);
+    return resultI.getData();
+  }
+ getQuestionList() async {
+    ListResult<Question> resultI = await NetManager.instance.getQuestionList(0);
+    if(resultI!=null)
+    setState(() {
+      datas.addAll(resultI.getData());
+    });
+
+  }
 }
