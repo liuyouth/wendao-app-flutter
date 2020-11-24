@@ -47,6 +47,7 @@ class MainPageState extends State<MainPage>
     super.initState();
     _tabController = TabController(vsync: this, length: 3)
       ..addListener(() {
+        if(_vm!=null)
         _vm.tabOnShow(_tabController.index);
 
         print('index ' + _tabController.index.toString());
