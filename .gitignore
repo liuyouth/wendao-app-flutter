@@ -4,3 +4,5 @@ build
 .flutter-plugins-dependencies
 Podfile.lock
 .packages
+.idea
+
