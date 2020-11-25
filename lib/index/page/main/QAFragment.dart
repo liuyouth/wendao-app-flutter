@@ -67,7 +67,9 @@ class QAFragment extends StatelessWidget {
             ),
           ),
         ),
-        new SizedBox(height: 40.0),
+        Container(
+          child: Text("eee"),
+        ),
         Expanded(child: Transform(
           transform: new Matrix4.translationValues(parallaxOffset*2, 0.0, 0.0),
           child:  ListView.builder(
@@ -97,24 +99,27 @@ class QAFragment extends StatelessWidget {
         child: Container(
           decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(12.0),
-              color: Color(0xff8876E5),
+              color: Color(0xffffffff),
               boxShadow: [
                 BoxShadow(
-                    color: Color(0xff8876E5),
+                    color: Color(0x88999999),
                     offset: Offset(0, 0.5),
                     blurRadius: 8.0,
                     spreadRadius: -.0)
               ]),
           margin: EdgeInsets.only(left: 20, right: 20),
-          height: 60,
+          height: 120,
           width: double.infinity,
           child: Padding(
               padding: EdgeInsets.all(10),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
-                  Text(value.title, textAlign:TextAlign.left  , style: TextStyles.textWhite14,),
+                  Row(children: <Widget>[
+                    Text(value.title, textAlign:TextAlign.left  , style: TextStyles.textBold16,)
+                  ],),
                   Text(value.info, style: TextStyle(color: Colors.white60),),
+
                 ],)
           ),
         ),
