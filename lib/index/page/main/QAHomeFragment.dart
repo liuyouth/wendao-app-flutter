@@ -4,6 +4,8 @@ import 'dart:math';
 import 'package:flustars/flustars.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:oktoast/oktoast.dart';
+import 'package:task/index/NetManager/ListRoot.dart';
 import 'package:task/index/NetManager/NetManager.dart';
 import 'package:task/index/NetManager/Result.dart';
 import 'package:task/index/page/main/Answer.dart';
@@ -167,23 +169,28 @@ class _QAHomeFragmentState extends State<QAHomeFragment> {
     answer.questionNo = datas[_currentPage.toInt()].number;
     answer.title = text;
     Answer a = await askQuestionNet(answer);
+    print('a'+a.toString());
     if(a!=null){
+      showToast("添加成功");
       setState(() {
         isShow = !isShow;
       });
     }else {
-
+      showToast("添加失败");
     }
+    getQuestionList();
   }
   Future<Answer> askQuestionNet(Answer answer) async {
     ResultI<Answer> resultI = await NetManager.instance.askQuestion(answer);
+    print('eee'+resultI.toString());
     return resultI.getData();
   }
  getQuestionList() async {
-    ListResult<Question> resultI = await NetManager.instance.getQuestionList(0);
+    ListRoot<Question> resultI = await NetManager.instance.getQuestionList(0);
     if(resultI!=null)
     setState(() {
-      datas.addAll(resultI.getData());
+      datas.clear();
+      datas.addAll(resultI.content);
     });
 
   }

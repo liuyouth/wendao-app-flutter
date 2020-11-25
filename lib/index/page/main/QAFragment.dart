@@ -44,7 +44,7 @@ class QAFragment extends StatelessWidget {
                   ]),
               margin: EdgeInsets.only(left: 20, right: 20),
               height: 170,
-              width: 360,
+              width: double.infinity,
               child: Padding(
                   padding: EdgeInsets.only(top: 8,left: 8,right: 8,bottom: 6),
                   child: Column(
@@ -69,7 +69,7 @@ class QAFragment extends StatelessWidget {
         ),
         new SizedBox(height: 40.0),
         Expanded(child: Transform(
-          transform: new Matrix4.translationValues(parallaxOffset, 0.0, 0.0),
+          transform: new Matrix4.translationValues(parallaxOffset*2, 0.0, 0.0),
           child:  ListView.builder(
               padding: EdgeInsets.all(5),
               itemCount: data.answers.length,
@@ -105,7 +105,7 @@ class QAFragment extends StatelessWidget {
                     blurRadius: 8.0,
                     spreadRadius: -.0)
               ]),
-          margin: EdgeInsets.only(left: 20, right: 50),
+          margin: EdgeInsets.only(left: 20, right: 20),
           height: 60,
           width: double.infinity,
           child: Padding(

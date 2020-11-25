@@ -87,10 +87,10 @@ class MainModel extends BaseModel {
 // //      return false;
 // //    }
 //   }
-  Future<List<Question>> getQuestionList() async {
-    ListResult<Question> resultI = await NetManager.instance.getQuestionList(0);
-    return resultI.getData();
-  }
+//   Future<List<Question>> getQuestionList() async {
+//     ListResult<Question> resultI = await NetManager.instance.getQuestionList(0);
+//     return resultI.getData();
+//   }
   /// 添加待办
 //  Future<DataResponse<TaskListEntity>> addTask(Task task) async {
 //    DataResponse<TaskListEntity> dataResponse;

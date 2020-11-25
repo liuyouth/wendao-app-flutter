@@ -5,6 +5,7 @@ import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
 import 'package:task/common/common.dart';
 import 'package:task/index/NetManager/ExceptionHandle.dart';
+import 'package:task/index/NetManager/ListRoot.dart';
 import 'package:task/index/NetManager/NetCore.dart';
 import 'package:task/index/NetManager/NetManager.dart';
 import 'package:task/index/NetManager/Result.dart';
@@ -54,8 +55,9 @@ class NetUtil {
 
     /// 打印Log(生产模式去除)
     if (!Constant.inProduction) {
-      _dio.interceptors.add(LoggingInterceptor());
+
     }
+    _dio.interceptors.add(LoggingInterceptor());
   }
   //    return Observable.fromFuture(
   //        NetUtil.instance.requestNetwork<T>(method, url, params: params)
@@ -78,6 +80,30 @@ class NetUtil {
         data: params, queryParameters: queryParameters, options: null, cancelToken: null);
   }
 
+  Future<ListRoot<T>> requestList<T>(Method method, String url, {dynamic params,dynamic queryParameters}) async {
+    var response = await _dio.request(url,
+        data: params,
+        queryParameters: queryParameters,
+        options: _checkOptions( NetUtil.instance.getRequestMethod(method), null),
+        cancelToken: null);
+    try {
+      /// 集成测试无法使用 isolate
+      Map<String, dynamic> _map = Constant.isTest
+          ? parseData(response.data.toString())
+          : await compute(parseData, response.data.toString());
+      if (_map.containsKey("content")) {
+        if (_map["content"] is List) {
+          return ListRoot<T>.fromJson(_map);
+        }else return ListRoot();
+      }
+      print("dio - error:" + _map.toString());
+      return ListRoot();
+    } catch (e) {
+      print("dio - error:" + e.toString());
+      return ListRoot();
+    }
+  }
+
   /// 请求网络
   // ignore: missing_return
   Future<ResultI<T>> _netRequest<T>(String method, String url,
@@ -98,6 +124,7 @@ class NetUtil {
       Map<String, dynamic> _map = Constant.isTest
           ? parseData(response.data.toString())
           : await compute(parseData, response.data.toString());
+      print("dio result"+_map.toString());
       if (_map.containsKey(Constant.data)) {
         if (_map[Constant.data] is List) {
           return ListResult<T>.fromJson(_map);
@@ -111,6 +138,9 @@ class NetUtil {
     }
   }
 
+  /**
+   * 返回json
+   */
   Future<Map<String, dynamic>> netRequestBare(String method, String url,
       {dynamic data,
         Map<String, dynamic> queryParameters,
@@ -128,13 +158,6 @@ class NetUtil {
           ? parseData(response.data.toString())
           : await compute(parseData, response.data.toString());
       return _map;
-      // if (_map.containsKey(Constant.data)) {
-      //   if (_map[Constant.data] is List) {
-      //     return ListResult<T>.fromJson(_map);
-      //   } else {
-      //     return Result<T>.fromJson(_map);
-      //   }
-      // }
     } catch (e) {
       print("dio - error:" + e.toString());
       return {};

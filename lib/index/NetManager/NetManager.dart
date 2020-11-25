@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:task/index/NetManager/ListParams.dart';
+import 'package:task/index/NetManager/ListRoot.dart';
 import 'package:task/index/NetManager/NetUtil.dart';
 import 'package:task/index/NetManager/Result.dart';
 import 'package:task/index/page/login/user.dart';
@@ -12,8 +13,8 @@ import 'package:task/index/page/main/Question.dart';
 /// 所有网络请求都通过 NetManager 发起请求
 class NetManager {
 
-    // static const String HOST = "http://api.wd.moi.pub/";
-    static const String HOST = "http://192.168.5.3:2010/";
+    static const String HOST = "http://api.wd.moi.pub/";
+    // static const String HOST = "http://192.168.5.3:2010/";
 //  static const String HOST = "http://192.168.5.14:2001/";
 //  static const String HOST = "http://172.20.10.3:2001/";
 //  static const String HOST = "http://192.168.101.6:2001/";
@@ -26,8 +27,8 @@ class NetManager {
   Future<ResultI<Answer>> askQuestion(Answer answer) {
     return NetUtil.instance.request(Method.post,"ask/",params: answer.getJson());
   }
-  Future<ResultI<Question>> getQuestionList(num page){
-    return NetUtil.instance.request<Question>(Method.get, "qu/", queryParameters:
+  Future<ListRoot<Question>> getQuestionList(num page){
+    return NetUtil.instance.requestList<Question>(Method.get, "qu/", queryParameters:
     {"currentPage":0,"pageSize":20});
   }
 

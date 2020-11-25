@@ -16,11 +16,12 @@ Answer _$AnswerFromJson(Map<String, dynamic> json) {
     json['questionNo'] as num,
     json['title'] as String,
     json['info'] as String,
-    json['avatar'] as String,
-    json['postUserNo'] as num,
     json['postTime'] as num,
     json['lastUpDateTime'] as num,
-  )..postUser = User.fromJson(json['postUser'] as Map<String, dynamic>);
+    json['avatar'] as String,
+    User.fromJson(json['postUser'] as Map<String, dynamic>),
+    json['postUserNo'] as num,
+  );
 }
 
 Map<String, dynamic> _$AnswerToJson(Answer instance) => <String, dynamic>{

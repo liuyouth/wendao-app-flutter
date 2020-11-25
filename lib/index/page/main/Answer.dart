@@ -20,8 +20,7 @@ class Answer {
   String avatar;//附图
 
   User postUser;
-  num postUserNo;// 提交用户编号
-
+  num postUserNo;
 
   Answer(
       this.id,
@@ -32,17 +31,16 @@ class Answer {
       this.questionNo,
       this.title,
       this.info,
-      this.avatar,
-      this.postUserNo,
       this.postTime,
-      this.lastUpDateTime);
+      this.lastUpDateTime,
+      this.avatar,
+      this.postUser,
+      this.postUserNo);
 
   @override
   String toString() {
     return 'Answer{id: $id, answer: $answer, answerer: $answerer, postDateTime: $postDateTime, number: $number, questionNo: $questionNo, title: $title, info: $info, postTime: $postTime, lastUpDateTime: $lastUpDateTime, avatar: $avatar, postUser: $postUser, postUserNo: $postUserNo}';
-  }
-
-
+  } // 提交用户编号
 
 
   factory Answer.fromJson(Map<String, dynamic> json) => _$AnswerFromJson(json);

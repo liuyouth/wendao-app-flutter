@@ -41,7 +41,7 @@ class Result<T> extends ResultI<T> {
         LogUtil.e(json[Constant.data],
             tag: "fromJson ：Wrong use of Result. ListResult should be used");
       } else {
-        print("eeeeo||||" + T.toString());
+        print("eeeeo|||| " + T.toString());
         if (T.toString() == "String") {
           data = json[Constant.data].toString() as T;
         } else if (T.toString() == "Map<dynamic, dynamic>") {

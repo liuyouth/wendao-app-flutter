@@ -89,7 +89,6 @@ class LoginModel extends BaseModel {
   /// 登录
   Future<User> login(String account, String pwd) async {
     ResultI<User> data = await NetManager.instance.login(account, pwd);
-    print('ddd' + data.toString());
     return data.data;
 //    if(data.code == 200){
 //      return true;
